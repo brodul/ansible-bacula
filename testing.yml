@@ -1,0 +1,20 @@
+---
+- hosts: testing-director
+  sudo: yes
+  roles:
+    - director
+
+- hosts: testing-storage
+  sudo: yes
+  roles:
+    - storage
+
+- hosts: testing-client
+  sudo: yes
+  roles:
+    - client
+
+- hosts: testing-almir
+  sudo: yes
+  roles:
+    - almir

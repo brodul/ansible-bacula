@@ -3,6 +3,9 @@
 # C extensions
 *.so
 
+include
+share
+
 # Packages
 *.egg
 *.egg-info

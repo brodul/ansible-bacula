@@ -1,0 +1,17 @@
+[testing-director]
+localhost ansible_ssh_port=2222
+
+[testing-storage]
+localhost ansible_ssh_port=2222
+
+[testing-client]
+localhost ansible_ssh_port=2222
+
+[testing-almir]
+localhost ansible_ssh_port=2222
+
+[testing:children]
+testing-director
+testing-storage
+testing-client
+testing-almir

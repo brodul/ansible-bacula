@@ -1,0 +1,13 @@
+- fail: msg="This is not Ubuntu 12.04"
+  when: "{{ ansible_distribution_version }} != 12.04"
+
+- action: apt pkg=$item update_cache=yes cache_valid_time=180 
+  with_items: 
+    - postgresql-client
+    - postgresql
+
+
+- apt: pkg={{ item }}
+  with_items: 
+    - bacula-director-pgsql
+    - bacula-console
