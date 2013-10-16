@@ -15,3 +15,15 @@ testing-director
 testing-storage
 testing-client
 testing-almir
+
+[director:children]
+testing-director
+
+[storage:children]
+testing-storage
+
+[client:children]
+testing-client
+
+[almir:children]
+testing-almir

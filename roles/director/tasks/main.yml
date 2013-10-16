@@ -1,13 +1,38 @@
 - fail: msg="This is not Ubuntu 12.04"
   when: "{{ ansible_distribution_version }} != 12.04"
 
+
 - action: apt pkg=$item update_cache=yes cache_valid_time=180 
   with_items: 
     - postgresql-client
     - postgresql
+    - python-psycopg2
 
 
 - apt: pkg={{ item }}
   with_items: 
     - bacula-director-pgsql
     - bacula-console
+
+- service: name=bacula-director state=stopped
+
+- template: src=bacula-dir.conf.jinja2 dest=/etc/bacula/bacula-dir.conf backup=yes
+  notify:
+  - restart bacula-dir
+
+- template: src=bconsole.conf.jinja2 dest=/etc/bacula/bconsole.conf backup=yes
+  notify:
+  - restart bacula-dir
+
+- file: path=/etc/bacula/clients state=directory
+
+- command: touch /etc/bacula/clients/dummy.conf
+  notify:
+  - restart bacula-dir
+
+- postgresql_user: user=bacula password={{ pgsql_password }}
+  sudo_user: postgres
+  notify:
+  - restart bacula-dir
+
+- file: path=/media/backup state=directory owner=bacula group=tape

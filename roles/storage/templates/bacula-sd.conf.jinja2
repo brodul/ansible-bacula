@@ -1,0 +1,29 @@
+Storage {
+  Name = {{ sd_name }}
+  SDPort = {{ bacula_sd_port }}
+  WorkingDirectory = "/var/lib/bacula"
+  Pid Directory = "/var/run/bacula"
+  Maximum Concurrent Jobs = 1
+}
+
+# List Directors who are permitted to contact Storage daemon
+Director {
+  Name = {{ dir_name }}
+  Password = "{{ sd_password }}"
+}
+
+Device {
+  Name = FileStorage
+  Media Type = File
+  Archive Device = "{{ backup_dir }}"
+  LabelMedia = yes;
+  Random Access = Yes;
+  AutomaticMount = yes;
+  RemovableMedia = no;
+  AlwaysOpen = no;
+}
+
+Messages {
+  Name = Standard
+  director = {{ dir_name }} = all
+}

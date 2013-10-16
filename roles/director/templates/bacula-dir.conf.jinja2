@@ -1,0 +1,195 @@
+Director {
+  Name = {{ dir_name }}
+  DIRport = {{ bacula_dir_port }}          # where we listen for UA connections
+  QueryFile = "/etc/bacula/scripts/query.sql"
+  WorkingDirectory = "/var/lib/bacula"
+  PidDirectory = "/var/run/bacula"
+  Maximum Concurrent Jobs = 1
+  Password = "{{ bconsole_password }}"         # Console password
+  Messages = Daemon
+}
+
+# =====================
+# GENERAL CONFIGURATION
+# =====================
+
+# Backup cycle
+Schedule {
+  Name = "BackupCycle"
+  Run = Level=Full 1st sun at 4:00
+  Run = Level=Differential 2nd-5th sun at 4:00
+  Run = Level=Incremental mon-sat at 4:00
+}
+
+{# Can be made with for host in groups['strorage']  #}
+# Shared storage for all clients
+Storage {
+  Name = File
+  SDPort = {{ bacula_sd_port }}
+  Address = {{ groups['storage'][0] }}
+  Password = "{{ sd_password }}"
+  Device = FileStorage
+  Media Type = File
+}
+
+# Job defaults
+JobDefs {
+  Name = "DefaultJob"
+  Type = Backup
+  Messages = Standard
+  Priority = 10
+  FileSet = "DefaultSet"
+  Schedule = "BackupCycle"
+  Write Bootstrap = "/var/lib/bacula/%c.bsr"
+}
+
+# List of files to be backed up
+FileSet {
+  Name = "DefaultSet"
+  Include {
+    Options {
+      signature = SHA1
+      compression = GZIP1
+      noatime = yes
+    }
+    File = /etc
+  }
+}
+
+# =======
+# CATALOG
+# =======
+
+Catalog {
+  Name = Catalog
+  dbdriver = "dbi:postgresql"; dbaddress = 127.0.0.1;
+  dbname = "bacula"; dbuser = "bacula"; dbpassword = {{ pgsql_password }} ;
+}
+Client {
+  Name = {{ dir_fd_name }}
+  Address = {{ groups['storage'][0] }}
+  Catalog = Catalog
+  Password = "${dir_fd_password}"
+}
+Schedule {
+  Name = "CatalogCycle"
+  Run = Full sun-sat at 23:10
+}
+FileSet {
+  Name = "Catalog Set"
+  Include {
+    Options {
+      signature = MD5
+    }
+    File = "/var/lib/bacula/bacula.sql"
+  }
+}
+Pool {
+  Name = CatalogPool
+  Label Format = Catalog-
+  Pool Type = Backup
+  Recycle = yes
+  AutoPrune = yes
+  Use Volume Once = yes
+  Volume Retention = 200 days
+  Maximum Volumes = 210
+}
+
+Job {
+  Name = "BackupCatalog"
+  JobDefs ="DefaultJob"
+  Client = "{{ dir_fd_name }}"
+  FileSet="Catalog Set"
+  Schedule = "CatalogCycle"
+  Level = Full
+  Storage = File
+  Messages = Standard
+  Pool = CatalogPool
+  # This creates an ASCII copy of the catalog
+  # Arguments to make_catalog_backup.pl are:
+  #  make_catalog_backup.pl <catalog-name>
+  RunBeforeJob = "/etc/bacula/scripts/make_catalog_backup.pl Catalog"
+  # This deletes the copy of the catalog
+  RunAfterJob  = "/etc/bacula/scripts/delete_catalog_backup"
+  Write Bootstrap = "/var/lib/bacula/%n.bsr"
+  Priority = 100                   # run after main backups
+}
+
+
+# =======
+# RESTORE
+# =======
+# only for placeholding 'Default' pool name
+Pool {
+  Name = Default
+  Pool Type = Backup
+}
+Job {
+  Name = "RestoreFiles"
+  Type = Restore
+  Client = {{ dir_fd_name }}
+  FileSet = "DefaultSet"
+  Storage = File
+  Pool = Default
+  Messages = Standard
+  Where = /tmp/bacula-restores
+}
+
+
+# ========
+# MESSAGES
+# ========
+
+# Reasonable message delivery -- send most everything to email address
+#  and to the console
+Messages {
+  Name = Standard
+#
+# NOTE! If you send to two email or more email addresses, you will need
+#  to replace the %r in the from field (-f part) with a single valid
+#  email address in both the mailcommand and the operatorcommand.
+#  What this does is, it sets the email address that emails would display
+#  in the FROM field, which is by default the same email as they're being
+#  sent to.  However, if you send email to more than one address, then
+#  you'll have to set the FROM address manually, to a single address.
+#  for example, a 'no-reply@mydomain.com', is better since that tends to
+#  tell (most) people that its coming from an automated source.
+
+#
+  mailcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \<%r\>\" -s \"Bacula: %t %e of %c %l\" %r"
+  operatorcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \<%r\>\" -s \"Bacula: Intervention needed for %j\" %r"
+  mail = {{ mail }} = all, !skipped, !info
+  operator = root@localhost = mount
+  console = all, !skipped, !saved
+#
+# WARNING! the following will create a file that you must cycle from
+#          time to time as it will grow indefinitely. However, it will
+#          also keep all your messages if they scroll off the console.
+#
+  append = "/var/lib/bacula/log" = all, !skipped
+  catalog = all, !skipped, !saved
+}
+
+
+#
+# Message delivery for daemon messages (no job).
+Messages {
+  Name = Daemon
+  mailcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \<%r\>\" -s \"Bacula daemon message\" %r"
+  mail = {{ mail }} = all, !skipped, !info
+  console = all, !skipped, !saved
+  append = "/var/log/bacula.log" = all, !skipped
+}
+
+
+# ========
+# CLIENTS
+# ========
+
+# Each client needs:
+# - Client
+# - Job
+# - 3 Pools (full, differential, incremental)
+
+# include contents of all *.conf files in clients/
+@|"sh -c 'cat /etc/bacula/clients/*.conf'"

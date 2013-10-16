@@ -1,20 +1,32 @@
 ---
-- hosts: testing-director
-  sudo: yes
-  roles:
-    - director
-
 - hosts: testing-storage
+  vars_files:
+    - var
   sudo: yes
   roles:
+    - common
     - storage
 
 - hosts: testing-client
+  vars_files:
+    - var
   sudo: yes
   roles:
+    - common
     - client
 
-- hosts: testing-almir
+- hosts: testing-director
+  vars_files:
+    - var
   sudo: yes
   roles:
+    - common
+    - director
+
+- hosts: testing-almir
+  vars_files:
+    - var
+  sudo: yes
+  roles:
+    - common
     - almir

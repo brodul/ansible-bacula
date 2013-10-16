@@ -4,3 +4,9 @@
 - apt: pkg={{ item }} update_cache=yes cache_valid_time=180
   with_items: 
   - bacula-sd-pgsql
+
+- service: name=bacula-sd state=stopped
+
+- template: src=bacula-sd.conf.jinja2 dest=/etc/bacula/bacula-sd.conf backup=yes
+  notify:
+  - restart bacula-sd

@@ -1,1 +1,10 @@
 ---
+
+- name: restart bacula-dir
+  service:  name=bacula-director state=restarted
+
+- name: restart bacula-sd
+  service: name=bacula-sd state=restarted
+
+- name: restart bacula-fd
+  service: name=bacula-fd state=restarted
