@@ -35,4 +35,4 @@
   notify:
   - restart bacula-dir
 
-- file: path=/media/backup state=directory owner=bacula group=tape
+- file: path={{ backup_dir }} state=directory owner=bacula group=tape
