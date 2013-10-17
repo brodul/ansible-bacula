@@ -13,6 +13,8 @@
   with_items: 
     - bacula-director-pgsql
     - bacula-console
+  notify:
+  - restart bacula-dir
 
 - service: name=bacula-director state=stopped
 
@@ -34,5 +36,16 @@
   sudo_user: postgres
   notify:
   - restart bacula-dir
+
+# dbcheck 
+# http://www.bacula.org/manuals/en/utility/utility/Volume_Utility_Tools.html#SECTION002120000000000000000
+# Usage: dbcheck [-c config ] [-B] [-C catalog name] [-d debug_level] 
+# <working-directory> <bacula-database> <user> <password> [<dbhost>] [<dbport>]
+# Used for default client cleaning
+# TODO: needs a dbdump just to be sure
+- command: dbcheck . bacula bacula {{ pgsql_password }} localhost -bf
+  notify:
+  - restart bacula-dir
+
 
 - file: path={{ backup_dir }} state=directory owner=bacula group=tape
