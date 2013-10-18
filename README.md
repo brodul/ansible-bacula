@@ -13,7 +13,6 @@ This is still in development don't run it on production.
 - the client part will be refactored it will describe the real clients and the
   director clients will move to director
 - add support for certs
-- distribution separation
 
 
 # How to test
