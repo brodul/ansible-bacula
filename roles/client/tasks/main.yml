@@ -1,14 +1,3 @@
 ---
-
-- fail: msg="This is not Ubuntu 12.04"
-  when: "{{ ansible_distribution_version }} != 12.04"
-
-- apt: pkg={{ item }} update_cache=yes cache_valid_time=180
-  with_items: 
-    - bacula-fd
-
-- service: name=bacula-fd state=stopped
-
-- template: src=bacula-fd.conf.jinja2 dest=/etc/bacula/bacula-fd.conf backup=yes
-  notify:
-  - restart bacula-fd
+- include: ubuntu.yml
+  when: "'Ubuntu-12.04' in group_names"
