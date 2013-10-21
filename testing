@@ -5,7 +5,7 @@ localhost ansible_ssh_port=2222
 localhost ansible_ssh_port=2222
 
 [testing-client]
-localhost ansible_ssh_port=2222
+localhost ansible_ssh_port=2223
 
 [testing-almir]
 localhost ansible_ssh_port=2222

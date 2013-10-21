@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+  - name: Create a group of all hosts by operating system
+    action: group_by key={{ansible_distribution}}-{{ansible_distribution_version}}
+
+
+- hosts: testing-client
+  vars_files:
+    - var
+  sudo: yes
+  roles:
+    - common
+    - client

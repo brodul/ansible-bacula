@@ -12,20 +12,13 @@
     - common
     - storage
 
-- hosts: testing-client
-  vars_files:
-    - var
-  sudo: yes
-  roles:
-    - common
-    - client
-
 - hosts: testing-director
   vars_files:
     - var
   sudo: yes
   roles:
     - common
+    - dir-client
     - director
 
 - hosts: testing-almir

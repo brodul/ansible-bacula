@@ -1,0 +1,12 @@
+---
+- apt: pkg={{ item }} update_cache=yes cache_valid_time=180
+  with_items: 
+    - bacula-fd
+
+- service: name=bacula-fd state=stopped
+  notify:
+  - restart bacula-fd
+
+- template: src=bacula-fd.conf.jinja2 dest=/etc/bacula/bacula-fd.conf backup=yes
+  notify:
+  - restart bacula-fd
