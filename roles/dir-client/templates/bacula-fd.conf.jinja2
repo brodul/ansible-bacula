@@ -1,5 +1,6 @@
 FileDaemon {
   Name = {{ dir_fd_name }}
+  FDAddress= localhost
   FDport = {{ bacula_fd_port }}                  # where we listen for the director
   WorkingDirectory = "/var/lib/bacula"
   Pid Directory = "/var/run/bacula"

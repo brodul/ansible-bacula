@@ -24,6 +24,28 @@
   notify:
   - restart bacula-dir
 
+###
+# Copy pools
+###
+
+- copy: src=pool_defaults.conf dest=/etc/bacula/
+  notify:
+  - restart bacula-dir
+
+- copy: src=pool_diff_defaults.conf dest=/etc/bacula/
+  notify:
+  - restart bacula-dir
+
+- copy: src=pool_full_defaults.conf dest=/etc/bacula/
+  notify:
+  - restart bacula-dir
+
+- copy: src=pool_inc_defaults.conf dest=/etc/bacula/
+  notify:
+  - restart bacula-dir
+
+###
+
 - file: path=/etc/bacula/clients state=directory
 
 - command: touch /etc/bacula/clients/dummy.conf

@@ -1,0 +1,60 @@
+# {{ client_name }} client configuration
+
+Client {
+  Name = {{ client_name }}-fd
+  Address = {{ client_ip }}
+  FDPort = {{ client_port }}
+  Catalog = Catalog
+  Password = "{{ client_password }}"          # password for FileDaemon
+}
+FileSet {
+  Name = "{{ client_name }}-set"
+  Include {
+    Options {
+      signature = SHA1
+      compression = GZIP1
+      noatime = yes
+      wildfile = "*.iso"
+      Exclude = yes
+     }
+    {% for item in client_include_dirs %}
+    File = {{ item }}
+    {% endfor %}
+    }
+    # Add paths to backup
+  Exclude {
+    {% for item in client_exclude_dirs %}
+    File = {{ item }}
+    {% endfor %}
+  }
+}
+Job {
+  Name = backup-{{ client_name }}
+  JobDefs = DefaultJob
+  Client = {{ client_name }}-fd
+  Storage = File
+  Level = Incremental
+  Pool = Default
+  Full Backup Pool = {{ client_name }}-full
+  Differential Backup Pool = {{ client_name }}-diff
+  Incremental Backup Pool = {{ client_name }}-inc
+  FileSet = "{{ client_name }}-set"
+}
+Pool {
+  Name = {{ client_name }}-full
+  Label Format = {{ client_name }}-full
+  @/etc/bacula/pool_defaults.conf
+  @/etc/bacula/pool_full_defaults.conf
+}
+Pool {
+  Name = {{ client_name }}-diff
+  Label Format = {{ client_name }}-diff
+  @/etc/bacula/pool_defaults.conf
+  @/etc/bacula/pool_diff_defaults.conf
+}
+Pool {
+  Name = {{ client_name }}-inc
+  Label Format = {{ client_name }}-inc
+  @/etc/bacula/pool_defaults.conf
+  @/etc/bacula/pool_inc_defaults.conf
+}
