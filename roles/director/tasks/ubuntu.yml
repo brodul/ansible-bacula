@@ -9,53 +9,33 @@
   with_items: 
     - bacula-director-pgsql
     - bacula-console
-  notify:
-  - restart bacula-dir
 
 - service: name=bacula-director state=stopped
-  notify:
-  - restart bacula-dir
 
 - template: src=bacula-dir.conf.jinja2 dest=/etc/bacula/bacula-dir.conf backup=yes
-  notify:
-  - restart bacula-dir
 
 - template: src=bconsole.conf.jinja2 dest=/etc/bacula/bconsole.conf backup=yes
-  notify:
-  - restart bacula-dir
 
 ###
 # Copy pools
 ###
 
 - copy: src=pool_defaults.conf dest=/etc/bacula/
-  notify:
-  - restart bacula-dir
 
 - copy: src=pool_diff_defaults.conf dest=/etc/bacula/
-  notify:
-  - restart bacula-dir
 
 - copy: src=pool_full_defaults.conf dest=/etc/bacula/
-  notify:
-  - restart bacula-dir
 
 - copy: src=pool_inc_defaults.conf dest=/etc/bacula/
-  notify:
-  - restart bacula-dir
 
 ###
 
 - file: path=/etc/bacula/clients state=directory
 
 - command: touch /etc/bacula/clients/dummy.conf
-  notify:
-  - restart bacula-dir
 
 - postgresql_user: user=bacula password={{ pgsql_password }}
   sudo_user: postgres
-  notify:
-  - restart bacula-dir
 
 # dbcheck 
 # http://www.bacula.org/manuals/en/utility/utility/Volume_Utility_Tools.html#SECTION002120000000000000000
@@ -64,8 +44,9 @@
 # Used for default client cleaning
 # TODO: needs a dbdump just to be sure
 - command: dbcheck . bacula bacula {{ pgsql_password }} localhost -bf
-  notify:
-  - restart bacula-dir
 
 
 - file: path={{ backup_dir }} state=directory owner=bacula group=tape
+
+
+- service: name=bacula-director state=started

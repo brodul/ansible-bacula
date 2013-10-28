@@ -8,8 +8,6 @@ This is still in development don't run it on production.
 
 # TODO
 
-- ansible handlers seem to be useless here since is hard to determine which
-  deamon to restart at one point
 - add support for certs
 
 
