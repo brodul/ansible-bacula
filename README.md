@@ -10,6 +10,17 @@ This is still in development don't run it on production.
 
 - add support for certs
 
+## Design decisions
+
+No support (yet) for:
+
+- safe deploy (don't restart if jobs running)
+- separation for director and storage
+
+Other:
+- catalog is on director
+
+
 
 # How to test
 
