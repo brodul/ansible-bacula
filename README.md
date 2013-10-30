@@ -1,13 +1,13 @@
 ansible-bacula
 ==============
 
-# How can you help
+## How can you help
 
 - Test if it works
 - make pull requests
 - write the docs
 
-# How to use for your environment
+## How to use for your environment
 
 I would recommend you that you to reuse the roles.
 
@@ -20,16 +20,16 @@ If you have other design patterns about reusage of ansible configuration please
 contact brodul on Freenode IRC server.
 
 
-# Warning
+## Warning
 
 This is still in development don't run it on production.
 
 
-# TODO
+## TODO
 
 - add support for certs
 
-# Design decisions
+## Design decisions
 
 No support (yet) for:
 
@@ -41,7 +41,7 @@ Other:
 
 
 
-# How to test
+## How to test
 
 - Make a lxc or virtualbox with clean Ubuntu 12.04 install with sshd.
 - Bind VM port 22 to localhost 2222 (or edit testing inventory).
