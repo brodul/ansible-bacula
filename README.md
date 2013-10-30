@@ -1,16 +1,35 @@
 ansible-bacula
 ==============
 
+# How can you help
+
+- Test if it works
+- make pull requests
+- write the docs
+
+# How to use for your environment
+
+I would recommend you that you to reuse the roles.
+
+see this two links:
+
+https://groups.google.com/forum/#!msg/ansible-project/vgc2bFQgzmE/0SDKwCniPjgJ
+http://www.ansibleworks.com/docs/playbooks_roles.html#id7
+
+If you have other design patterns about reusage of ansible configuration please
+contact brodul on Freenode IRC server.
+
 
 # Warning
 
 This is still in development don't run it on production.
 
+
 # TODO
 
 - add support for certs
 
-## Design decisions
+# Design decisions
 
 No support (yet) for:
 
