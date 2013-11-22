@@ -1,8 +1,15 @@
+# File Daemon = FD = "client" # all the same
 FileDaemon {
+  # File deamon/client name
   Name = {{ client_name }}-fd
-  FDport = {{ bacula_fd_port }}                  # where we listen for the director
+  # Where we listen for the director
+  FDport = {{ bacula_fd_port }}
+
+  # Program working directory and PID file
   WorkingDirectory = "/var/lib/bacula"
   Pid Directory = "/var/run/bacula"
+
+  # Maximum Jobs that client can handle
   Maximum Concurrent Jobs = 2
 
   ###
@@ -21,7 +28,9 @@ FileDaemon {
 
 # List Directors who are permitted to contact this File daemon
 Director {
+  # Director name (must match the configuration of the director)
   Name = {{ dir_name }}
+  # Password set in the director conf for this FD/client
   Password = {{ client_password }}
 }
 
