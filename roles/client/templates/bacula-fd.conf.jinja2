@@ -4,6 +4,19 @@ FileDaemon {
   WorkingDirectory = "/var/lib/bacula"
   Pid Directory = "/var/run/bacula"
   Maximum Concurrent Jobs = 2
+
+  ###
+  # Encryption
+  ###
+
+  # Enable Data Signing
+  PKI Signatures = Yes
+  # Enable Data Encryption
+  PKI Encryption = Yes
+  # Public and Private Keys
+  PKI Keypair = "/etc/bacula/cert/{{ client_name }}.pem"
+  # ONLY the Public Key
+  PKI Master Key = "/etc/bacula/cert/master.cert"
 }
 
 # List Directors who are permitted to contact this File daemon

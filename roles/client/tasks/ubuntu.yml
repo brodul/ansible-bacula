@@ -12,4 +12,25 @@
   - restart bacula-dir
   delegate_to: "{{ groups['director'][0] }}"
 
+- file: dest=/etc/bacula/cert state=directory
+
+- local_action: command ls ./cert/master.cert
+  sudo: no
+  register: result
+
+#- local_action: script make_key_pair.sh
+  #sudo: no
+  #when: result|failed
+
+- debug: "Key pair generated."
+  when: result|failed
+  tags:
+    - debug
+
+#- local_action: script make_fd_pair.sh {{ client_name }}
+  #sudo: no
+
+- copy: src=./cert/master.cert dest=/etc/bacula/cert/
+- copy: src=./cert/{{ client_name }}.pem dest=/etc/bacula/cert/
+
 - service: name=bacula-fd state=started
