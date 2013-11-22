@@ -178,7 +178,7 @@ Messages {
   mailcommand = "/usr/sbin/bsmtp -h localhost -f \"\(Bacula\) \<%r\>\" -s \"Bacula daemon message\" %r"
   mail = {{ mail }} = all, !skipped, !info
   console = all, !skipped, !saved
-  append = "/var/log/bacula.log" = all, !skipped
+  append = "/var/log/bacula/bacula.log" = all, !skipped
 }
 
 
