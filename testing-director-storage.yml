@@ -4,14 +4,6 @@
   - name: Create a group of all hosts by operating system
     action: group_by key={{ansible_distribution}}-{{ansible_distribution_version}}
 
-- hosts: testing-storage
-  vars_files:
-    - var
-  sudo: yes
-  roles:
-    - common
-    - storage
-
 - hosts: testing-director
   vars_files:
     - var
@@ -20,6 +12,14 @@
     - common
     - dir-client
     - director
+
+- hosts: testing-storage
+  vars_files:
+    - var
+  sudo: yes
+  roles:
+    - common
+    - storage
 
 - hosts: testing-almir
   vars_files:
