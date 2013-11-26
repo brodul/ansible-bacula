@@ -8,8 +8,9 @@
 - template: src=bacula-fd.conf.jinja2 dest=/etc/bacula/bacula-fd.conf backup=yes
 
 - template: src=client.conf.jinja2 dest=/etc/bacula/clients/{{ client_name }}-client.conf
-  notify:
-  - restart bacula-dir
+  delegate_to: "{{ groups['director'][0] }}"
+
+- service: state=restarted name=bacula-director
   delegate_to: "{{ groups['director'][0] }}"
 
 - file: dest=/etc/bacula/cert state=directory
