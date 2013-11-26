@@ -69,7 +69,7 @@ Client {
   Name = {{ dir_fd_name }}
   Address = {{ groups['storage'][0] }}
   Catalog = Catalog
-  Password = "${dir_fd_password}"
+  Password = "{{ dir_fd_password }}"
 }
 Schedule {
   Name = "CatalogCycle"
