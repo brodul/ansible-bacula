@@ -67,7 +67,7 @@ Catalog {
 }
 Client {
   Name = {{ dir_fd_name }}
-  Address = {{ groups['storage'][0] }}
+  Address = localhost
   Catalog = Catalog
   Password = "{{ dir_fd_password }}"
 }
