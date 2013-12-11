@@ -2,3 +2,4 @@
 sd_address: "{{ groups['storage'][0] }}"
 client_name: "{{ ansible_hostname }}"
 client_ip: "{{ ansible_fqdn }}"
+extra_client_config: ""
