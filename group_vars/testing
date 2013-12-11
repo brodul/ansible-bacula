@@ -7,7 +7,6 @@ bconsole_password: random1
 
 sd_name: bacula-sd
 bacula_sd_port: 9103
-sd_address: "{{ groups['storage'][0] }}"
 sd_password: wombat
 backup_dir: /media/backup
 
@@ -17,9 +16,7 @@ dir_fd_password: kombat
 
 mail: test@mailinator.com
 
-client_name: "{{ ansible_hostname }}"
 client_password: test2
-client_ip: "{{ ansible_fqdn }}"
 client_port: 9102
 
 client_include_dirs: [ '/proc/net/tcp', ]
