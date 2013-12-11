@@ -22,11 +22,13 @@ FileSet {
     {% endfor %}
     }
     # Add paths to backup
+  {% if client_exclude_dirs %}
   Exclude {
     {% for item in client_exclude_dirs %}
     File = {{ item }}
     {% endfor %}
   }
+  {% endif %}
 }
 Job {
   Name = backup-{{ client_name }}
