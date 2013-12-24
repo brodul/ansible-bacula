@@ -1,10 +1,15 @@
+#
+# Ignore all build docs
+docs/build
+
+# virtual-env ignore
+include
+share
+
 *.py[cod]
 
 # C extensions
 *.so
-
-include
-share
 
 # Packages
 *.egg
