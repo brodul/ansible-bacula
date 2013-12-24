@@ -5,8 +5,6 @@
     action: group_by key={{ansible_distribution}}-{{ansible_distribution_version}}
 
 - hosts: testing-director
-  vars_files:
-    - testing-var
   sudo: yes
   roles:
     - common
@@ -14,16 +12,12 @@
     - director
 
 - hosts: testing-storage
-  vars_files:
-    - var
   sudo: yes
   roles:
     - common
     - storage
 
 - hosts: testing-almir
-  vars_files:
-    - var
   sudo: yes
   roles:
     - common

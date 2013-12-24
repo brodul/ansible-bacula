@@ -6,8 +6,6 @@
 
 
 - hosts: testing-client
-  vars_files:
-    - testing-var
   sudo: yes
   roles:
     - common
