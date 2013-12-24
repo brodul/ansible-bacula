@@ -1,3 +1,10 @@
 ---
+
+- fail: msg="{{ansible_lsb.description}} is not supported"
+  when: "not ansible_lsb.description in supported"
+
 - include: ubuntu.yml
   when: "'Ubuntu-12.04' in group_names"
+
+- include: ubuntu.yml
+  when: "'Ubuntu-10.04' in group_names"
