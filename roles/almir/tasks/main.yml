@@ -1,1 +1,28 @@
 ---
+- apt: pkg={{ item }}
+  with_items:
+    - git
+    - bacula-console
+    - python-distribute
+    - gcc
+    - python-dev
+    - wget
+
+# almir user should be bacula according to the documentation
+# http://almir.readthedocs.org/en/latest/userguide.html#installer-interactive
+- user: name={{ almir_user }}
+
+- file: state=directory path={{almir_dir}} owner={{almir_user}}
+
+- file: state=directory path=/tmp/almir owner={{almir_user}}
+
+- copy: src=pre_almir.sh dest={{almir_dir}}/
+
+- copy: src=post_almir.sh dest={{almir_dir}}/
+
+
+- command: bash pre_almir.sh chdir={{almir_dir}}
+
+- template: src=production.ini dest={{almir_dir}}/production.ini
+
+- command: bash post_almir.sh chdir={{almir_dir}}
