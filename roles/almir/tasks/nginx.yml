@@ -1,0 +1,14 @@
+---
+- apt: pkg=nginx
+- apt: pkg=openssl
+
+- shell: printf "admin:$(openssl passwd -1 {{ almir_web_pass }})\n" >> {{ almir_dir }}/.htpasswd 
+
+- template: src=nginx_almir.conf dest=/etc/nginx/sites-available/
+  tags:
+    - almir
+
+- file: state=link src=/etc/nginx/sites-available/nginx_almir.conf path=/etc/nginx/sites-enabled/nginx_almir.conf 
+
+- name: restart nginx
+  service: name=nginx state=restarted

@@ -29,3 +29,5 @@
 - command: sed -i 's/pg8000 = 1.09/pg8000 = 1.9.2/' {{almir_dir}}/buildout.d/versions.cfg
 
 - command: bash post_almir.sh chdir={{almir_dir}}
+
+- include: nginx.yml
