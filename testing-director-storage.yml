@@ -6,6 +6,8 @@
 
 - hosts: testing-director
   sudo: yes
+  tags:
+    - director
   roles:
     - common
     - dir-client
@@ -13,12 +15,16 @@
 
 - hosts: testing-storage
   sudo: yes
+  tags:
+    - storage
   roles:
     - common
     - storage
 
 - hosts: testing-almir
   sudo: yes
+  tags:
+    - almir
   roles:
     - common
     - almir
