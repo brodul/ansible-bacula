@@ -21,3 +21,9 @@ client_port: 9102
 
 client_include_dirs: [ '/proc/net/tcp', ]
 client_exclude_dirs: []
+
+# almir
+
+sql_engine: postgresql+pg8000://bacula:{{ pgsql_password }}@localhost/bacula
+timezone: CET
+almir_web_pass: wombat
