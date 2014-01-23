@@ -23,6 +23,9 @@
 
 - command: bash pre_almir.sh chdir={{almir_dir}}
 
-- template: src=production.ini dest={{almir_dir}}/production.ini
+- template: src=buildout.cfg dest={{almir_dir}}/buildout.cfg
+
+# tmp fix https://github.com/iElectric/almir/issues/63
+- command: sed -i 's/pg8000 = 1.09/pg8000 = 1.9.2/' {{almir_dir}}/buildout.d/versions.cfg
 
 - command: bash post_almir.sh chdir={{almir_dir}}
