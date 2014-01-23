@@ -1,14 +1,15 @@
 [testing-director]
-localhost ansible_ssh_port=2222
+ip-172-31-7-238.us-west-2.compute.internal
 
 [testing-storage]
-localhost ansible_ssh_port=2222
-
-[testing-client]
-localhost ansible_ssh_port=2223
+ip-172-31-7-238.us-west-2.compute.internal
 
 [testing-almir]
-localhost ansible_ssh_port=2222
+ip-172-31-7-238.us-west-2.compute.internal
+
+[testing-client]
+ip-172-31-7-236.us-west-2.compute.internal
+ip-172-31-7-237.us-west-2.compute.internal
 
 [testing:children]
 testing-director
