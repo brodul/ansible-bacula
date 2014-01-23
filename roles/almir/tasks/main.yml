@@ -3,7 +3,7 @@
   with_items:
     - git
     - bacula-console
-    - python-distribute
+    - python-setuptools
     - gcc
     - python-dev
     - wget
