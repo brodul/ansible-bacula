@@ -74,14 +74,57 @@ http://galaxy.ansibleworks.com/ is released will port this playbook there
 How to test
 -----------
 
-.. NOTE::
+I recommend you use a public cloud for testing anything other will go also.
+You should easily adapt to your testing infrastructure.
 
-  Will be updated soon.
+Add at least 3 instances (2 clients and 1 director/storage). I use the micro
+instances on Amazon Web services EC2.
 
-- Make a lxc or virtualbox with clean Ubuntu 12.04 install with sshd.
-- Bind VM port 22 to localhost 2222 (or edit testing inventory).
-- Add your key to sudo user.
-- Run: ansible-playbook -i testing testing-director-storage.yml -K (on the
-  director/storage)
-- Run: ansible-playbook -i testing testing-clients.yml -K (on the clients)
+On your computer start ssh-agent and add your key with ssh-add. Make sure that
+the agent propegates the key to the connected host.
 
+Connect to the director instance. Install::
+
+  - python-dev
+  - python-virtualenv
+  - git
+  - openssl
+
+Clone this.
+
+Change directory to the cloned dir. Make a virtual-env in the cloned dir with::
+
+  virtualenv .
+
+Activate virtualenv and install ansible::
+
+  . bin/activate
+  pip install ansible
+
+Set the correct hostnames in the testing inventory file. See example in the EC2
+you need to setup the internal hostnames and domains.
+
+Then you need to generate the master key pair and the client pairs.
+
+For the generation of master keys run make_key_pair.sh.
+
+Then set the group_vars/testing file. See example.
+
+Then you need to generate the key pairs for each client in the system.
+The first argument needs to be the hostname of a client without the domain.
+See example::
+  
+  sh make_fd_pair.sh ip-172-31-7-237
+
+Then run::
+
+  ansible-playbook   testing-director-storage.yml -i testing  -u ubuntu
+
+This will configure the director/storage.
+
+Then run::
+
+  ansible-playbook   testing-clients.yml -i testing  -u ubuntu
+
+This will configure the director/storage.
+  
